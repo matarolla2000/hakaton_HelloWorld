@@ -6,6 +6,9 @@
     <title>Main</title>
 </head>
 <body>
-    
+    <h1>Добро пожаловать, {{ username }}</h1>
+    <form action="{{ url_for('logout')}}" method="post">
+        <input type="submit" value="Выйти">
+    </form>
 </body>
 </html>
