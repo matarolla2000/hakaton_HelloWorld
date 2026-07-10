@@ -49,31 +49,52 @@ def check_password():
     length = len(password)
     
     if length == 0:
-        return jsonify({"time": "Введите пароль, чтобы узнать время взлома", "color": "#88929c"})
+        return jsonify({"time": "Введите пароль для анализа надежности", "color": "#626c77"})
         
-    time_to_crack = "0 секунд"
-    color = "#ff4d4d"
+    has_upper = any(char.isupper() for char in password)
+    has_lower = any(char.islower() for char in password)
+    has_digit = any(char.isdigit() for char in password)
+    has_special = any(not char.isalnum() for char in password)
     
-    if 0 < length < 6:
-        time_to_crack = "Мгновенно (менее 1 секунды)"
-    elif 6 <= length < 9:
-        time_to_crack = "Около 2 минут"
-    elif 9 <= length < 12:
-        time_to_crack = "Примерно 5 дней"
-        color = "#ffb300"
-    elif length >= 12:
-        has_upper = any(char.isupper() for char in password)
-        has_digit = any(char.isdigit() for char in password)
+    score = 0
+    requirements = []
+    
+    if length >= 8:
+        score += 1
+    else:
+        requirements.append("минимум 8 символов")
         
-        if has_upper and has_digit:
-            time_to_crack = "Более 400 лет (Отличная защита!)"
-            color = "#2efd4c"
-        else:
-            time_to_crack = "Около 3 месяцев"
-            color = "#ffb300"
-            
+    if has_digit:
+        score += 1
+    else:
+        requirements.append("цифры")
+        
+    if has_upper and has_lower:
+        score += 1
+    else:
+        requirements.append("разный регистр (Аа)")
+        
+    if has_special:
+        score += 1
+    else:
+        requirements.append("спецсимволы (@#$)")
+
+    if score <= 1:
+        status_text = "❌ Критически слабый пароль! Взлом займет до 1 секунды."
+        if requirements:
+            status_text += " Добавьте: " + ", ".join(requirements)
+        color = "#d32f2f"
+    elif score == 2 or score == 3:
+        status_text = "⚠️ Слабый/Средний пароль. Будет взломан за короткий срок."
+        if requirements:
+            status_text += " Рекомендуется добавить: " + ", ".join(requirements)
+        color = "#f57c00"
+    else:
+        status_text = "🎯 Идеальный пароль МТС ID! Устойчив к брутфорсу (более 1000 лет)."
+        color = "#388e3c"
+        
     return jsonify({
-        "time": f"Время взлома хакерами: {time_to_crack}",
+        "time": status_text,
         "color": color
     })
 
@@ -88,13 +109,13 @@ def check_phish():
     if is_reported:
         return jsonify({
             "text": "🎯 Отлично! Вы распознали фишинг. Домен mts-premium-bonus.ru — поддельный (+5 к рейтингу)",
-            "color": "#2efd4c",
+            "color": "#388e3c",
             "score": "90"
         })
     else:
         return jsonify({
             "text": "❌ Вы попались! Настоящий домен МТС — mts.ru. Данные утекли бы хакерам (-10 к рейтингу)",
-            "color": "#ff4d4d",
+            "color": "#d32f2f",
             "score": "75"
         })
 
