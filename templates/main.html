@@ -1,143 +1,94 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<<<<<<< HEAD
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>МТС — Кибербезопасность</title>
-<link rel="stylesheet" href="style.css">
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&display=swap" rel="stylesheet">
-</head>
-<body>
-
-  <header>
-    <div class="logo">
-      <div class="logo-square"></div>
-      МТС
-    </div>
-    <nav>
-      <ul>
-        <li><a href="#" class="active">Главная</a></li>
-        <li><a href="#"></a></li>
-        <li><a href="#">Услуги</a></li>
-        <li><a href="#">Контакты</a></li>
-      </ul>
-    </nav>
-  </header>
-
-  <main>
-    <section class="hero">
-      <div class="hero-inner">
-        <span class="tag">Безопасность МТС</span>
-        <h1>Кибербезопасность, о которой не нужно думать</h1>
-        <p>
-          Мы защищаем ваши данные, устройства и деньги от мошенников:
-          безопасный интернет, антивирус и шифрование соединений
-          работают в фоне, пока вы пользуетесь связью и сервисами МТС.
-        </p>
-      </div>
-    </section>
-
-    <section class="features">
-      <div class="feature-card">
-        <div class="dot"></div>
-        <h3>Защита от мошенников</h3>
-        <p>Блокируем подозрительные звонки и сообщения ещё до того, как они дойдут до вас.</p>
-      </div>
-      <div class="feature-card">
-        <div class="dot"></div>
-        <h3>Безопасный интернет</h3>
-        <p>Фильтруем опасные сайты и защищаем детей от нежелательного контента.</p>
-      </div>
-      <div class="feature-card">
-        <div class="dot"></div>
-        <h3>Шифрование данных</h3>
-        <p>Ваш трафик и личная информация передаются в защищённом виде.</p>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <a href="file:///C:/Users/фы/OneDrive/Документы/GitHub/hakaton_HelloWorld/templates/test.html" class="test-link">
-      Перейти на тест
-      <span class="arrow">→</span>
-    </a>
-  </footer>
-
-=======
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Панель МТС Кибербез</title>
+    <title>Панель HelloWorld Кибербез</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
-    <div class="dashboard-header">
-        <div class="user-info">
-            <h1>Привет, <span>{{ username }}</span></h1>
-            <p>Панель сотрудника МТС Киберлайн</p>
+    <header>
+        <div class="logo">
+            <div class="logo-square"></div>
+            <span>HelloWorld</span>
         </div>
         <div class="header-actions">
-            <a href="{{ url_for('test') }}" class="btn-nav">Перейти к тесту</a>
+            <nav>
+                <ul>
+                    <li><a href="{{ url_for('main') }}" class="active">Панель</a></li>
+                    <li><a href="{{ url_for('test') }}">Тест</a></li>
+                </ul>
+            </nav>
             <form action="{{ url_for('logout') }}" method="post">
-                <input type="submit" class="btn-logout" value="Выйти из системы">
+                <input type="submit" class="btn-logout" value="Выйти">
             </form>
         </div>
-    </div>
+    </header>
 
-    <div class="dashboard-grid">
+    <section class="hero">
+        <div class="hero-inner">
+            <span class="tag">Панель сотрудника</span>
+            <h1>Привет, {{ username }}</h1>
+            <p>Добро пожаловать в единую систему мониторинга цифровой защищенности и кибербезопасности HelloWorld Киберлайн.</p>
+        </div>
+    </section>
 
-        <div class="card">
-            <h3>Ваш Cyber-Score</h3>
-            <div class="score-box">
-                <div class="score-number" id="userScore">85</div>
-                <div class="score-text">Индекс цифровой безопасности вашего рабочего места</div>
+    <section class="main-section">
+        <div class="dashboard-grid">
+
+            <div class="card">
+                <h3>Ваш Cyber-Score</h3>
+                <div class="score-box">
+                    <div class="score-number" id="userScore">85</div>
+                    <div class="score-text">Индекс цифровой безопасности вашего рабочего места</div>
+                </div>
+                <p style="font-size: 13px; color: #555; margin-top: auto;">Вы входите в топ-15% защищенных сотрудников отдела.</p>
             </div>
-            <p style="font-size: 13px; color: #626c77; margin-top: auto;">Вы входите в топ-15% защищенных сотрудников отдела.</p>
-        </div>
 
-        <div class="card">
-            <h3>Проверка рабочего пароля</h3>
-            <input type="password" class="pwd-input" id="pwdChecker" placeholder="Введите пароль для проверки безопасности...">
-            <div class="pwd-status" id="pwdStatus">Введите пароль, чтобы узнать время взлома</div>
-        </div>
-
-        <div class="card">
-            <h3>Симулятор угроз</h3>
-            <div class="phish-box">
-                <div class="phish-sender">От: info@mts-premium-bonus.ru</div>
-                <div class="phish-body">"Вам начислен годовой бонус МТС Premium! Срочно подтвердите данные по ссылке..."</div>
-                <div class="phish-actions" id="phishActions">
-                    <button class="btn-action trust" onclick="sendPhishDecision(false)">Доверять</button>
-                    <button class="btn-action report" onclick="sendPhishDecision(true)">Репорт в ИБ</button>
-                </div>
-                <div class="phish-result" id="phishResult"></div>
+            <div class="card">
+                <h3>Проверка рабочего пароля</h3>
+                <input type="password" class="pwd-input" id="pwdChecker" placeholder="Введите пароль для проверки безопасности...">
+                <div class="pwd-status" id="pwdStatus">Введите пароль, чтобы узнать время взлома</div>
             </div>
-        </div>
 
-        <div class="card full-width">
-            <h3>Мониторинг угроз экосистемы МТС <span style="font-size: 12px; color: #388e3c; font-weight: normal;">● Системы SOC в норме</span></h3>
-            <div class="threat-list">
-                <div class="threat-item">
-                    <span>Фишинг под видом доменов «МТС Линк» (программы видеоконференций)</span>
-                    <span class="threat-badge high">Критический</span>
-                </div>
-                <div class="threat-item">
-                    <span>Волна СМС-скама с предложением фальшивых тарифов «МТС Premium»</span>
-                    <span class="threat-badge medium">Средний</span>
-                </div>
-                <div class="threat-item">
-                    <span>Целевые атаки на сотрудников через фальшивые аккаунты директоров в Telegram</span>
-                    <span class="threat-badge high">Критический</span>
+            <div class="card">
+                <h3>Симулятор угроз</h3>
+                <div class="phish-box">
+                    <div class="phish-sender">От: info@helloworld-premium-bonus.ru</div>
+                    <div class="phish-body">"Вам начислен годовой бонус HelloWorld Premium! Срочно подтвердите данные по ссылке..."</div>
+                    <div class="phish-actions" id="phishActions">
+                        <button class="btn-action trust" onclick="sendPhishDecision(false)">Доверять</button>
+                        <button class="btn-action report" onclick="sendPhishDecision(true)">Репорт в ИБ</button>
+                    </div>
+                    <div class="phish-result" id="phishResult"></div>
                 </div>
             </div>
+
+            <div class="card full-width">
+                <h3>Мониторинг угроз экосистемы HelloWorld <span style="font-size: 12px; color: #388e3c; font-weight: normal;">● Системы SOC в норме</span></h3>
+                <div class="threat-list">
+                    <div class="threat-item">
+                        <span>Фишинг под видом доменов «HelloWorld Линк» (программы видеоконференций)</span>
+                        <span class="threat-badge high">Критический</span>
+                    </div>
+                    <div class="threat-item">
+                        <span>Волна СМС-скама с предложением фальшивых тарифов «HelloWorld Premium»</span>
+                        <span class="threat-badge medium">Средний</span>
+                    </div>
+                    <div class="threat-item">
+                        <span>Целевые атаки на сотрудников через фальшивые аккаунты директоров в Telegram</span>
+                        <span class="threat-badge high">Критический</span>
+                    </div>
+                </div>
+            </div>
+
         </div>
+    </section>
 
-    </div>
-
-    <a href="{{ url_for('logout') }}" class="logout-btn">Выйти из системы</a>
+    <footer>
+        <div>© 2026 HelloWorld Кибербезопасность. Все права защищены.</div>
+    </footer>
 
     <script>
         const pwdChecker = document.getElementById('pwdChecker');
@@ -156,7 +107,16 @@
                 
                 const data = await response.json();
                 pwdStatus.innerText = data.time;
-                pwdStatus.style.color = data.color;
+                
+                if (data.color === '#ff4d4d') {
+                    pwdStatus.style.color = '#d32f2f';
+                } else if (data.color === '#ffb300') {
+                    pwdStatus.style.color = '#f57c00';
+                } else if (data.color === '#2efd4c') {
+                    pwdStatus.style.color = '#388e3c';
+                } else {
+                    pwdStatus.style.color = data.color;
+                }
                 
             } catch (error) {
                 console.error(error);
@@ -180,14 +140,20 @@
                 
                 const data = await response.json();
                 resultDiv.innerText = data.text;
-                resultDiv.style.color = data.color;
                 scoreDiv.innerText = data.score;
+                
+                if (data.color === '#ff4d4d') {
+                    resultDiv.style.color = '#d32f2f';
+                } else if (data.color === '#2efd4c') {
+                    resultDiv.style.color = '#388e3c';
+                } else {
+                    resultDiv.style.color = data.color;
+                }
                 
             } catch (error) {
                 console.error(error);
             }
         }
     </script>
->>>>>>> 06d8a6156c6f842bb51820e7d8244ec3c6a8cc1d
 </body>
 </html>

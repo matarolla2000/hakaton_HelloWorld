@@ -1,184 +1,115 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HelloWorld — Опросник по кибербезопасности</title>
-<link rel="stylesheet" href="test.css">
-<link rel="stylesheet" href="/test.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Кибер-Тренировка | HelloWorld</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='test.css') }}">
 </head>
 <body>
 
-<input type="radio" name="slide" id="s1" class="nav-radio" checked>
-<input type="radio" name="slide" id="s2" class="nav-radio">
-<input type="radio" name="slide" id="s3" class="nav-radio">
-<input type="radio" name="slide" id="s4" class="nav-radio">
-<input type="radio" name="slide" id="s5" class="nav-radio">
-<input type="radio" name="slide" id="s6" class="nav-radio">
-<input type="radio" name="slide" id="s7" class="nav-radio">
-<input type="radio" name="slide" id="s8" class="nav-radio">
-<input type="radio" name="slide" id="s9" class="nav-radio">
-<input type="radio" name="slide" id="s10" class="nav-radio">
-<input type="radio" name="slide" id="s11" class="nav-radio">
+    <form id="quizForm" action="" method="get" onsubmit="return false;">
 
-<header class="top">
-  <b>●</b> МТС
-  <p>Опросник: проверь свою кибербезопасность</p>
-</header>
+        <input type="radio" name="slide_nav" id="s1" class="nav-radio" checked>
+        <input type="radio" name="slide_nav" id="s2" class="nav-radio">
+        <input type="radio" name="slide_nav" id="s3" class="nav-radio">
+        <input type="radio" name="slide_nav" id="s4" class="nav-radio">
 
-<main>
+        <div class="top">
+            <b>HelloWorld</b> Кибербезопасность
+            <p>Интерактивный экспресс-тренинг для сотрудников</p>
+        </div>
 
-  <section class="slide" id="c1">
-    <p class="eyebrow">Вопрос 1 из 10</p>
-    <p class="q">Вам пришло письмо «от банка» с просьбой срочно перейти по ссылке и ввести пароль. Что делать?</p>
-    <input type="radio" name="a1" id="a1-1" class="opt"><label for="a1-1" class="opt-label">Перейти и ввести пароль, раз срочно</label>
-    <input type="radio" name="a1" id="a1-2" class="opt"><label for="a1-2" class="opt-label">Проверить адрес отправителя и не переходить по ссылке</label>
-    <input type="radio" name="a1" id="a1-3" class="opt"><label for="a1-3" class="opt-label">Переслать письмо друзьям для проверки</label>
-    <input type="radio" name="a1" id="a1-4" class="opt"><label for="a1-4" class="opt-label">Ответить на письмо со своим паролем</label>
-    <p class="hint">✔ Верно: проверить адрес и не переходить по ссылке. Банки не просят пароли по почте.</p>
-    <nav class="bar">
-      <span class="arrow ghost">←</span>
-      <label for="s2" class="arrow next">→</label>
-    </nav>
-  </section>
+        <main>
+            
+            <div class="slide" id="c1">
+                <div class="eyebrow">Ситуация 1 из 3</div>
+                <div class="q">Вам на рабочую почту пришло уведомление: "Ваш корпоративный аккаунт заблокирован. Срочно обновите пароль по ссылке helloworld-premium-support.ru". Ваши действия?</div>
+                
+                <input type="radio" name="q1" id="q1_o1" class="opt bad">
+                <label for="q1_o1" class="opt-label">Перейду по ссылке и введу текущие данные для проверки.</label>
 
-  <section class="slide" id="c2">
-    <p class="eyebrow">Вопрос 2 из 10</p>
-    <p class="q">Какой пароль надёжнее всего?</p>
-    <input type="radio" name="a2" id="a2-1" class="opt"><label for="a2-1" class="opt-label">123456</label>
-    <input type="radio" name="a2" id="a2-2" class="opt"><label for="a2-2" class="opt-label">Имя + дата рождения</label>
-    <input type="radio" name="a2" id="a2-3" class="opt"><label for="a2-3" class="opt-label">Qw7$mLp9!vZr — длинный и случайный</label>
-    <input type="radio" name="a2" id="a2-4" class="opt"><label for="a2-4" class="opt-label">Один и тот же пароль везде</label>
-    <p class="hint">✔ Верно: длинный случайный пароль. Используйте менеджер паролей.</p>
-    <nav class="bar">
-      <label for="s1" class="arrow back">←</label>
-      <label for="s3" class="arrow next">→</label>
-    </nav>
-  </section>
+                <input type="radio" name="q1" id="q1_o2" class="opt good">
+                <label for="q1_o2" class="opt-label">Проигнорирую и отправлю письмо на аудит в ИБ-департамент.</label>
 
-  <section class="slide" id="c3">
-    <p class="eyebrow">Вопрос 3 из 10</p>
-    <p class="q">Для чего нужна двухфакторная аутентификация (2FA)?</p>
-    <input type="radio" name="a3" id="a3-1" class="opt"><label for="a3-1" class="opt-label">Чтобы ускорить вход в аккаунт</label>
-    <input type="radio" name="a3" id="a3-2" class="opt"><label for="a3-2" class="opt-label">Чтобы добавить ещё один уровень защиты, кроме пароля</label>
-    <input type="radio" name="a3" id="a3-3" class="opt"><label for="a3-3" class="opt-label">Чтобы не запоминать пароль</label>
-    <input type="radio" name="a3" id="a3-4" class="opt"><label for="a3-4" class="opt-label">Это просто маркетинг</label>
-    <p class="hint">✔ Верно: 2FA — дополнительная защита. Даже украденный пароль не даст войти в аккаунт.</p>
-    <nav class="bar">
-      <label for="s2" class="arrow back">←</label>
-      <label for="s4" class="arrow next">→</label>
-    </nav>
-  </section>
+                <input type="radio" name="q1" id="q1_o3" class="opt bad">
+                <label for="q1_o3" class="opt-label">Отвечу на письмо с требованием разъяснить причину блокировки.</label>
 
-  <section class="slide" id="c4">
-    <p class="eyebrow">Вопрос 4 из 10</p>
-    <p class="q">Вы в кафе, есть бесплатный Wi-Fi без пароля. Как безопаснее выходить в интернет?</p>
-    <input type="radio" name="a4" id="a4-1" class="opt"><label for="a4-1" class="opt-label">Подключиться и сразу зайти в интернет-банк</label>
-    <input type="radio" name="a4" id="a4-2" class="opt"><label for="a4-2" class="opt-label">Подключиться и использовать VPN</label>
-    <input type="radio" name="a4" id="a4-3" class="opt"><label for="a4-3" class="opt-label">Раздать этот Wi-Fi всем друзьям</label>
-    <input type="radio" name="a4" id="a4-4" class="opt"><label for="a4-4" class="opt-label">Ввести на этой сети пароли от всех сервисов</label>
-    <p class="hint">✔ Верно: VPN шифрует трафик. Открытые сети легко прослушать.</p>
-    <nav class="bar">
-      <label for="s3" class="arrow back">←</label>
-      <label for="s5" class="arrow next">→</label>
-    </nav>
-  </section>
+                <input type="radio" name="q1" id="q1_o4" class="opt bad">
+                <label for="q1_o4" class="opt-label">Перешлю коллегам в рабочий чат, чтобы узнать, было ли у них такое.</label>
 
-  <section class="slide" id="c5">
-    <p class="eyebrow">Вопрос 5 из 10</p>
-    <p class="q">Пришло сообщение от «коллеги»: «Срочно скинь код из смс, не могу зайти». Ваши действия?</p>
-    <input type="radio" name="a5" id="a5-1" class="opt"><label for="a5-1" class="opt-label">Скинуть код — коллеге срочно надо</label>
-    <input type="radio" name="a5" id="a5-2" class="opt"><label for="a5-2" class="opt-label">Позвонить коллеге напрямую и уточнить</label>
-    <input type="radio" name="a5" id="a5-3" class="opt"><label for="a5-3" class="opt-label">Скинуть код, а потом спросить, зачем он нужен</label>
-    <input type="radio" name="a5" id="a5-4" class="opt"><label for="a5-4" class="opt-label">Опубликовать код в общем чате</label>
-    <p class="hint">✔ Верно: позвонить и уточнить. Коды из смс нельзя пересылать никому — это социальная инженерия.</p>
-    <nav class="bar">
-      <label for="s4" class="arrow back">←</label>
-      <label for="s6" class="arrow next">→</label>
-    </nav>
-  </section>
+                <div class="alert-box green-box">🎯 Правильно! Домен helloworld-premium-support.ru — фишинговый подлог хакеров.</div>
+                <div class="alert-box red-box">❌ Ошибка! Данные будут перехвачены злоумышленниками. Настоящие адреса только на *.mts.ru.</div>
 
-  <section class="slide" id="c6">
-    <p class="eyebrow">Вопрос 6 из 10</p>
-    <p class="q">Почему важно вовремя обновлять приложения и операционную систему?</p>
-    <input type="radio" name="a6" id="a6-1" class="opt"><label for="a6-1" class="opt-label">Обновления просто меняют дизайн</label>
-    <input type="radio" name="a6" id="a6-2" class="opt"><label for="a6-2" class="opt-label">Они закрывают уязвимости, которыми пользуются злоумышленники</label>
-    <input type="radio" name="a6" id="a6-3" class="opt"><label for="a6-3" class="opt-label">Это не важно, если стоит антивирус</label>
-    <input type="radio" name="a6" id="a6-4" class="opt"><label for="a6-4" class="opt-label">Обновления нужны только на компьютере</label>
-    <p class="hint">✔ Верно: обновления закрывают уязвимости. Многие атаки используют именно старые дыры в защите.</p>
-    <nav class="bar">
-      <label for="s5" class="arrow back">←</label>
-      <label for="s7" class="arrow next">→</label>
-    </nav>
-  </section>
+                <div class="bar">
+                    <div class="arrow ghost">←</div>
+                    <label for="s2" class="arrow next">→</label>
+                </div>
+            </div>
 
-  <section class="slide" id="c7">
-    <p class="eyebrow">Вопрос 7 из 10</p>
-    <p class="q">Как правильно хранить резервную копию важных данных?</p>
-    <input type="radio" name="a7" id="a7-1" class="opt"><label for="a7-1" class="opt-label">Не делать копии — и так сойдёт</label>
-    <input type="radio" name="a7" id="a7-2" class="opt"><label for="a7-2" class="opt-label">Хранить только на одной флешке</label>
-    <input type="radio" name="a7" id="a7-3" class="opt"><label for="a7-3" class="opt-label">Делать копии регулярно и хранить минимум в двух местах</label>
-    <input type="radio" name="a7" id="a7-4" class="opt"><label for="a7-4" class="opt-label">Отправить архив по почте случайному адресату</label>
-    <p class="hint">✔ Верно: правило «3-2-1» — несколько копий, на разных носителях, одна отдельно.</p>
-    <nav class="bar">
-      <label for="s6" class="arrow back">←</label>
-      <label for="s8" class="arrow next">→</label>
-    </nav>
-  </section>
+            <div class="slide" id="c2">
+                <div class="eyebrow">Ситуация 2 из 3</div>
+                <div class="q">Какое правило создания и хранения пароля для учетной записи HelloWorld ID обеспечивает максимальную защиту?</div>
+                
+                <input type="radio" name="q2" id="q2_o1" class="opt bad">
+                <label for="q2_o1" class="opt-label">Использовать пароль из 8 строчных букв и сохранить его в текстовом файле на рабочем столе.</label>
 
-  <section class="slide" id="c8">
-    <p class="eyebrow">Вопрос 8 из 10</p>
-    <p class="q">Что из этого — признак поддельного сайта интернет-магазина?</p>
-    <input type="radio" name="a8" id="a8-1" class="opt"><label for="a8-1" class="opt-label">Есть значок замка (https) в адресной строке</label>
-    <input type="radio" name="a8" id="a8-2" class="opt"><label for="a8-2" class="opt-label">Странный адрес сайта и слишком низкие цены на всё подряд</label>
-    <input type="radio" name="a8" id="a8-3" class="opt"><label for="a8-3" class="opt-label">Есть контакты и юридический адрес</label>
-    <input type="radio" name="a8" id="a8-4" class="opt"><label for="a8-4" class="opt-label">Отзывы покупателей с фото товара</label>
-    <p class="hint">✔ Верно: подозрительный домен и «слишком хорошие» скидки — частый признак мошенничества.</p>
-    <nav class="bar">
-      <label for="s7" class="arrow back">←</label>
-      <label for="s9" class="arrow next">→</label>
-    </nav>
-  </section>
+                <input type="radio" name="q2" id="q2_o2" class="opt bad">
+                <label for="q2_o2" class="opt-label">Поставить сложный пароль, но использовать его на всех внешних сайтах и форумах.</label>
 
-  <section class="slide" id="c9">
-    <p class="eyebrow">Вопрос 9 из 10</p>
-    <p class="q">Звонят и представляются «службой безопасности банка», просят продиктовать код из смс. Это:</p>
-    <input type="radio" name="a9" id="a9-1" class="opt"><label for="a9-1" class="opt-label">Обычная проверка личности</label>
-    <input type="radio" name="a9" id="a9-2" class="opt"><label for="a9-2" class="opt-label">Мошенничество — банк никогда не спрашивает код из смс</label>
-    <input type="radio" name="a9" id="a9-3" class="opt"><label for="a9-3" class="opt-label">Нужно продиктовать, чтобы не заблокировали карту</label>
-    <input type="radio" name="a9" id="a9-4" class="opt"><label for="a9-4" class="opt-label">Стоит перезвонить позже и всё же продиктовать</label>
-    <p class="hint">✔ Верно: это мошенничество. Сотрудники банка никогда не спрашивают коды и пароли по телефону.</p>
-    <nav class="bar">
-      <label for="s8" class="arrow back">←</label>
-      <label for="s10" class="arrow next">→</label>
-    </nav>
-  </section>
+                <input type="radio" name="q2" id="q2_o3" class="opt bad">
+                <label for="q2_o3" class="opt-label">Менять простой пароль каждую неделю, добавляя в конец порядковый номер (например, Pass1, Pass2).</label>
 
-  <section class="slide" id="c10">
-    <p class="eyebrow">Вопрос 10 из 10</p>
-    <p class="q">Какая привычка лучше всего защищает ваши аккаунты в долгосрочной перспективе?</p>
-    <input type="radio" name="a10" id="a10-1" class="opt"><label for="a10-1" class="opt-label">Один пароль для всего — так проще запомнить</label>
-    <input type="radio" name="a10" id="a10-2" class="opt"><label for="a10-2" class="opt-label">Разные пароли, менеджер паролей и 2FA на важных сервисах</label>
-    <input type="radio" name="a10" id="a10-3" class="opt"><label for="a10-3" class="opt-label">Записывать пароли на стикере у монитора</label>
-    <input type="radio" name="a10" id="a10-4" class="opt"><label for="a10-4" class="opt-label">Никогда не менять пароли, если их не взломали</label>
-    <p class="hint">✔ Верно: разные пароли + менеджер + 2FA — надёжная база цифровой гигиены.</p>
-    <nav class="bar">
-      <label for="s9" class="arrow back">←</label>
-      <label for="s11" class="arrow next">→</label>
-    </nav>
-  </section>
+                <input type="radio" name="q2" id="q2_o4" class="opt good">
+                <label for="q2_o4" class="opt-label">Создать комбинацию от 12 символов разного регистра со знаками и никогда не дублировать её.</label>
 
-  <section class="slide" id="c11">
-    <p class="eyebrow">Результат</p>
-    <p class="q">Вы прошли опросник по кибербезопасности МТС!</p>
-    <p class="hint">Вернитесь стрелкой назад, чтобы свериться со своими ответами и подсказками — это реальные советы для защиты ваших данных.</p>
-    <nav class="bar">
-      <label for="s10" class="arrow back">←</label>
-      <label for="s1" class="arrow next restart">Заново</label>
-    </nav>
-  </section>
+                <div class="alert-box green-box">🎯 Правильно! Длина, уникальность и разнообразие символов делают брутфорс невозможным.</div>
+                <div class="alert-box red-box">❌ Ошибка! Простые, дублирующиеся или хранящиеся на виду пароли взламываются за секунды.</div>
 
-</main>
+                <div class="bar">
+                    <label for="s1" class="arrow">←</label>
+                    <label for="s3" class="arrow next">→</label>
+                </div>
+            </div>
+
+            <div class="slide" id="c3">
+                <div class="eyebrow">Ситуация 3 из 3</div>
+                <div class="q">В стороннем мессенджере вам пишет аккаунт с фотографией директора и требует срочно перевести конфиденциальный отчет. Что делать?</div>
+                
+                <input type="radio" name="q3" id="q3_o1" class="opt bad">
+                <label for="q3_o1" class="opt-label">Немедленно отправить файлы, чтобы не вызывать недовольство руководства.</label>
+
+                <input type="radio" name="q3" id="q3_o2" class="opt good">
+                <label for="q3_o2" class="opt-label">Связаться с директором по проверенному внутреннему корпоративному телефону.</label>
+
+                <input type="radio" name="q3" id="q3_o3" class="opt bad">
+                <label for="q3_o3" class="opt-label">Запросить у пишущего текстовое подтверждение его личности в этом же чате.</label>
+
+                <input type="radio" name="q3" id="q3_o4" class="opt bad">
+                <label for="q3_o4" class="opt-label">Скинуть отчет, но предварительно зашифровать его обычным архивным паролем.</label>
+
+                <div class="alert-box green-box">🎯 Правильно! Это классический случай социнженерии (Fake Boss). Нужен звонок по внутреннему каналу.</div>
+                <div class="alert-box red-box">❌ Ошибка! Это фейковый аккаунт. Передача данных приведет к мгновенной критической утечке.</div>
+
+                <div class="bar">
+                    <label for="s2" class="arrow">←</label>
+                    <label for="s4" class="arrow next">→</label>
+                </div>
+            </div>
+
+            <div class="slide" id="c4">
+                <div class="eyebrow">Результат</div>
+                <div class="q">Поздравляем, тренировка кибербезопасности успешно пройдена!</div>
+                <p style="font-size: 15px; color: #555; line-height: 1.5; margin-bottom: 20px;">Вы разобрали базовые типы угроз (фишинг, слабые пароли и социальную инженерию). Применяйте эти правила на рабочем месте, чтобы поддерживать высокий уровень защиты.</p>
+                
+                <div class="bar">
+                    <a href="{{ url_for('main') }}" class="arrow restart">Вернуться в панель</a>
+                    <button type="reset" class="arrow restart" style="background: var(--black);" onclick="document.getElementById('s1').checked = true;">Пройти заново</button>
+                </div>
+            </div>
+
+        </main>
+    </form>
 
 </body>
 </html>

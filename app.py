@@ -1,7 +1,7 @@
 from flask import Flask, request, render_template, redirect, url_for, session, jsonify
 
 app = Flask(__name__)
-app.secret_key = 'any_secret_string_here'
+app.secret_key = 'abcd'
 
 @app.route("/")
 def index():
@@ -90,7 +90,7 @@ def check_password():
             status_text += " Рекомендуется добавить: " + ", ".join(requirements)
         color = "#f57c00"
     else:
-        status_text = "🎯 Идеальный пароль МТС ID! Устойчив к брутфорсу (более 1000 лет)."
+        status_text = "🎯 Идеальный пароль HelloWorld ID! Устойчив к брутфорсу (более 1000 лет)."
         color = "#388e3c"
         
     return jsonify({
@@ -108,13 +108,13 @@ def check_phish():
     
     if is_reported:
         return jsonify({
-            "text": "🎯 Отлично! Вы распознали фишинг. Домен mts-premium-bonus.ru — поддельный (+5 к рейтингу)",
+            "text": "🎯 Отлично! Вы распознали фишинг. Домен helloworld-premium-bonus.ru — поддельный (+5 к рейтингу)",
             "color": "#388e3c",
             "score": "90"
         })
     else:
         return jsonify({
-            "text": "❌ Вы попались! Настоящий домен МТС — mts.ru. Данные утекли бы хакерам (-10 к рейтингу)",
+            "text": "❌ Вы попались! Настоящий домен HelloWorld — helloworld.ru. Данные утекли бы хакерам (-10 к рейтингу)",
             "color": "#d32f2f",
             "score": "75"
         })

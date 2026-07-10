@@ -1,8 +1,17 @@
+:root {
+    --mts-red:   #e30611;
+    --black:     #1a1a1a;
+    --gray-bg:   #f2f3f7;
+    --white:     #ffffff;
+    --line:      #cccfd9;
+    --text-muted:#626c77;
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: "MTSSans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
 }
 
 body {
@@ -10,21 +19,38 @@ body {
     align-items: center;
     justify-content: center;
     min-height: 100vh;
-    background: #f2f3f7; 
-    color: #1d2024;
+    background: var(--gray-bg);
+    color: var(--black);
+    padding: 20px;
+}
+
+.login-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 380px;
+    gap: 24px; 
+}
+
+.hello-title {
+    font-size: 48px;
+    font-weight: 800;
+    text-align: center;
+    letter-spacing: -1px;
+    color: var(--black);
 }
 
 form {
-    background: #ffffff;
+    background: var(--white);
     padding: 40px;
     border-radius: 16px;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+    border: 1px solid #e3e5ec;
     width: 100%;
-    max-width: 380px;
     display: flex;
     flex-direction: column;
     gap: 20px;
-    border: 1px solid #e3e5ec;
 }
 
 .form-group {
@@ -32,56 +58,57 @@ form {
     flex-direction: column;
     gap: 8px;
     font-size: 13px;
-    font-weight: 500;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    color: #626c77;
+    color: var(--text-muted);
 }
 
 input[type="text"],
 input[type="password"] {
     width: 100%;
     padding: 14px 16px;
-    background: #f2f3f7;
-    border: 1px solid #cccfd9;
+    background: var(--gray-bg);
+    border: 1px solid var(--line);
     border-radius: 10px;
     font-size: 16px;
-    color: #1d2024;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    color: var(--black);
+    transition: all 0.2s ease;
     outline: none;
 }
 
 input[type="text"]:focus,
 input[type="password"]:focus {
-    border-color: #ff0000;
-    background: #ffffff;
-    box-shadow: 0 0 0 4px rgba(255, 0, 0, 0.1);
+    border-color: var(--mts-red);
+    background: var(--white);
+    box-shadow: 0 0 0 4px rgba(227, 6, 17, 0.1);
 }
 
 input[type="submit"] {
     width: 100%;
     padding: 16px;
-    background: #ff0000;
-    color: #ffffff;
+    background: var(--mts-red);
+    color: var(--white);
     border: none;
     border-radius: 10px;
     font-size: 16px;
     font-weight: 700;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: background 0.2s ease;
     margin-top: 10px;
-    box-shadow: 0 4px 12px rgba(255, 0, 0, 0.15);
+    box-shadow: 0 4px 12px rgba(227, 6, 17, 0.15);
 }
 
 input[type="submit"]:hover {
-    background: #e60000;
-    box-shadow: 0 6px 20px rgba(255, 0, 0, 0.2);
+    background: #c4001f;
 }
 
 input[type="submit"]:active {
     transform: scale(0.98);
 }
 
-::placeholder {
-    color: #929aa3;
+@media (max-width: 480px) {
+    .hello-title {
+        font-size: 36px;
+    }
 }
