@@ -1,7 +1,19 @@
 from flask import Flask, request, render_template, redirect, url_for, session, jsonify
+import requests
 
 app = Flask(__name__)
 app.secret_key = 'abcd'
+
+AITUNNEL_API_KEY = "sk-aitunnel-6i4pekK3jyrb3QoId5IOBJO0Aii4DKs2"
+AITUNNEL_URL = "https://api.aitunnel.ru/v1/chat/completions"
+AITUNNEL_MODEL = "gpt-4o-mini"
+
+AI_SYSTEM_PROMPT = (
+    "Ты — ИИ-ассистент по кибербезопасности на портале HelloWorld. "
+    "Помогай сотрудникам с вопросами о паролях, фишинге и цифровой гигиене. "
+    "Отвечай кратко, дружелюбно и по-русски."
+)
+
 
 @app.route("/")
 def index():
@@ -85,12 +97,12 @@ def check_password():
             status_text += " Добавьте: " + ", ".join(requirements)
         color = "#d32f2f"
     elif score == 2 or score == 3:
-        status_text = "⚠️ Слабый/Средний пароль. Будет взломан за короткий срок."
+        status_text = "⚠️  Слабый/Средний пароль. Будет взломан за короткий срок."
         if requirements:
             status_text += " Рекомендуется добавить: " + ", ".join(requirements)
         color = "#f57c00"
     else:
-        status_text = "🎯 Идеальный пароль HelloWorld ID! Устойчив к брутфорсу (более 1000 лет)."
+        status_text = "🎯  Идеальный пароль HelloWorld ID! Устойчив к брутфорсу (более 1000 лет)."
         color = "#388e3c"
         
     return jsonify({
@@ -108,7 +120,7 @@ def check_phish():
     
     if is_reported:
         return jsonify({
-            "text": "🎯 Отлично! Вы распознали фишинг. Домен helloworld-premium-bonus.ru — поддельный (+5 к рейтингу)",
+            "text": "🎯  Отлично! Вы распознали фишинг. Домен helloworld-premium-bonus.ru — поддельный (+5 к рейтингу)",
             "color": "#388e3c",
             "score": "90"
         })
@@ -118,6 +130,60 @@ def check_phish():
             "color": "#d32f2f",
             "score": "75"
         })
+
+
+@app.route("/api/ai_chat", methods=["POST"])
+def ai_chat():
+    if not session.get('logined'):
+        return jsonify({"error": "Unauthorized"}), 403
+
+    data = request.get_json() or {}
+    user_message = (data.get("message") or "").strip()
+
+    if not user_message:
+        return jsonify({"error": "Пустое сообщение"}), 400
+
+    history = session.get("ai_history", [])
+    history.append({"role": "user", "content": user_message})
+
+    trimmed_history = history[-10:]
+
+    messages = [{"role": "system", "content": AI_SYSTEM_PROMPT}] + trimmed_history
+
+    try:
+        response = requests.post(
+            AITUNNEL_URL,
+            headers={
+                "Authorization": f"Bearer {AITUNNEL_API_KEY}",
+                "Content-Type": "application/json",
+            },
+            json={
+                "model": AITUNNEL_MODEL,
+                "messages": messages,
+                "max_tokens": 800,
+            },
+            timeout=30,
+        )
+        response.raise_for_status()
+        result = response.json()
+        reply_text = result["choices"][0]["message"]["content"]
+    except requests.exceptions.RequestException as e:
+        return jsonify({"error": f"Ошибка обращения к ИИ: {e}"}), 502
+    except (KeyError, IndexError):
+        return jsonify({"error": "Не удалось разобрать ответ ИИ"}), 502
+
+    history.append({"role": "assistant", "content": reply_text})
+    session["ai_history"] = history[-10:]
+
+    return jsonify({"reply": reply_text})
+
+
+@app.route("/api/ai_chat/reset", methods=["POST"])
+def ai_chat_reset():
+    """Сбросить историю диалога с ассистентом (например, по кнопке 'Очистить чат')."""
+    session.pop("ai_history", None)
+    return jsonify({"status": "ok"})
+
 
 if __name__ == '__main__':
     app.run(debug=True)

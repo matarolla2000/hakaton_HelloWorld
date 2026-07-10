@@ -435,6 +435,167 @@ footer {
     margin-top: auto;
 }
 
+/* ============================================================
+   ВИДЖЕТ ИИ-АССИСТЕНТА (плавающая кнопка + окно чата справа снизу)
+   ============================================================ */
+
+/* Круглая кнопка-переключатель в правом нижнем углу экрана */
+.ai-toggle-btn {
+    position: fixed;
+    right: 28px;
+    bottom: 28px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--mts-red);
+    color: var(--mts-white);
+    border: none;
+    font-size: 26px;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(255, 0, 50, 0.35);
+    z-index: 1000;
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.ai-toggle-btn:hover {
+    background: var(--mts-red-dark);
+    transform: scale(1.06);
+}
+
+/* Окно чата: скрыто по умолчанию, появляется по клику на кнопку */
+.ai-chat-window {
+    position: fixed;
+    right: 28px;
+    bottom: 100px;
+    width: 340px;
+    max-width: calc(100vw - 40px);
+    height: 460px;
+    max-height: calc(100vh - 140px);
+    background: var(--mts-white);
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(16, 27, 45, 0.2);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 1000;
+
+    /* По умолчанию окно спрятано ниже и прозрачно */
+    opacity: 0;
+    transform: translateY(20px);
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* Класс .open добавляется/убирается через JS при клике на кнопку */
+.ai-chat-window.open {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.ai-chat-header {
+    background: var(--mts-navy);
+    color: var(--mts-white);
+    padding: 14px 16px;
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.ai-close-btn {
+    background: none;
+    border: none;
+    color: var(--mts-white);
+    font-size: 16px;
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+.ai-close-btn:hover { opacity: 1; }
+
+.ai-chat-messages {
+    flex: 1;
+    padding: 16px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: var(--mts-ice);
+}
+
+.ai-chat-messages::-webkit-scrollbar { width: 6px; }
+.ai-chat-messages::-webkit-scrollbar-thumb { background: #cccfd9; border-radius: 10px; }
+
+.ai-msg {
+    max-width: 85%;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 13px;
+    line-height: 1.4;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.ai-msg-user {
+    align-self: flex-end;
+    background: var(--mts-red);
+    color: var(--mts-white);
+    border-bottom-right-radius: 3px;
+}
+
+.ai-msg-bot {
+    align-self: flex-start;
+    background: var(--mts-white);
+    color: var(--mts-black);
+    border: 1px solid #e0e6ee;
+    border-bottom-left-radius: 3px;
+}
+
+.ai-msg-loading {
+    color: #888;
+    font-style: italic;
+}
+
+.ai-chat-input-row {
+    display: flex;
+    gap: 8px;
+    padding: 12px;
+    border-top: 1px solid #eee;
+    background: var(--mts-white);
+}
+
+.ai-chat-input-row input {
+    flex: 1;
+    padding: 10px 12px;
+    background: var(--mts-ice);
+    border: 1px solid transparent;
+    border-radius: 8px;
+    font-size: 13px;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.ai-chat-input-row input:focus {
+    border-color: var(--mts-red);
+    background: var(--mts-white);
+}
+
+.ai-chat-input-row button {
+    width: 38px;
+    border: none;
+    border-radius: 8px;
+    background: var(--mts-red);
+    color: var(--mts-white);
+    font-size: 15px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.ai-chat-input-row button:hover { background: var(--mts-red-dark); }
+.ai-chat-input-row button:disabled { background: #cccfd9; cursor: not-allowed; }
+
 @media (max-width: 720px) {
     header { padding: 16px 20px; flex-direction: column; gap: 14px; }
     .hero { padding: 40px 24px; }
@@ -442,4 +603,15 @@ footer {
     .main-section { padding: 20px 16px; }
     .dashboard-grid { grid-template-columns: 1fr; }
     .card.full-width { grid-column: span 1; }
+
+    .ai-chat-window {
+        right: 16px;
+        left: 16px;
+        width: auto;
+        bottom: 90px;
+    }
+    .ai-toggle-btn {
+        right: 16px;
+        bottom: 16px;
+    }
 }

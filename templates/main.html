@@ -90,6 +90,29 @@
         <div>© 2026 HelloWorld Кибербезопасность. Все права защищены.</div>
     </footer>
 
+    <!-- ============================================================
+         ВИДЖЕТ ИИ-АССИСТЕНТА (кнопка справа снизу + окно чата)
+         Никакого API-ключа здесь нет и быть не должно —
+         вся связь с AITUNNEL идёт через наш сервер /api/ai_chat
+         ============================================================ -->
+    <button id="aiToggleBtn" class="ai-toggle-btn" title="Открыть ИИ-ассистента">💬</button>
+
+    <div id="aiChatWindow" class="ai-chat-window">
+        <div class="ai-chat-header">
+            <span>🤖 ИИ-ассистент по кибербезопасности</span>
+            <button id="aiCloseBtn" class="ai-close-btn" title="Закрыть">✕</button>
+        </div>
+        <div id="aiChatMessages" class="ai-chat-messages">
+            <div class="ai-msg ai-msg-bot">
+                Привет! Я ИИ-ассистент HelloWorld. Спросите меня о паролях, фишинге или цифровой безопасности.
+            </div>
+        </div>
+        <div class="ai-chat-input-row">
+            <input type="text" id="aiChatInput" placeholder="Введите вопрос...">
+            <button id="aiSendBtn">➤</button>
+        </div>
+    </div>
+
     <script>
         const pwdChecker = document.getElementById('pwdChecker');
         const pwdStatus = document.getElementById('pwdStatus');
@@ -154,6 +177,91 @@
                 console.error(error);
             }
         }
+
+        // ============================================================
+        //  Логика виджета ИИ-ассистента
+        // ============================================================
+
+        // Ссылки на элементы виджета
+        const aiToggleBtn = document.getElementById('aiToggleBtn');
+        const aiChatWindow = document.getElementById('aiChatWindow');
+        const aiCloseBtn = document.getElementById('aiCloseBtn');
+        const aiChatMessages = document.getElementById('aiChatMessages');
+        const aiChatInput = document.getElementById('aiChatInput');
+        const aiSendBtn = document.getElementById('aiSendBtn');
+
+        // Открыть / закрыть окно чата по клику на плавающую кнопку
+        aiToggleBtn.addEventListener('click', () => {
+            aiChatWindow.classList.toggle('open');
+            if (aiChatWindow.classList.contains('open')) {
+                aiChatInput.focus();
+            }
+        });
+        aiCloseBtn.addEventListener('click', () => {
+            aiChatWindow.classList.remove('open');
+        });
+
+        // Добавить сообщение в окно чата (role: 'user' или 'bot')
+        function addAiMessage(text, role) {
+            const msgDiv = document.createElement('div');
+            msgDiv.classList.add('ai-msg', role === 'user' ? 'ai-msg-user' : 'ai-msg-bot');
+            msgDiv.innerText = text;
+            aiChatMessages.appendChild(msgDiv);
+            // Автопрокрутка вниз к последнему сообщению
+            aiChatMessages.scrollTop = aiChatMessages.scrollHeight;
+            return msgDiv;
+        }
+
+        // Отправить сообщение пользователя на сервер и показать ответ ИИ
+        async function sendAiMessage() {
+            const text = aiChatInput.value.trim();
+            if (!text) return;
+
+            // Показываем сообщение пользователя сразу
+            addAiMessage(text, 'user');
+            aiChatInput.value = '';
+            aiSendBtn.disabled = true;
+
+            // Показываем временное сообщение "печатает..."
+            const loadingMsg = addAiMessage('Печатает...', 'bot');
+            loadingMsg.classList.add('ai-msg-loading');
+
+            try {
+                const response = await fetch('/api/ai_chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify({ message: text })
+                });
+
+                const data = await response.json();
+
+                // Убираем "печатает..." и показываем настоящий ответ
+                loadingMsg.remove();
+
+                if (data.error) {
+                    addAiMessage('Ошибка: ' + data.error, 'bot');
+                } else {
+                    addAiMessage(data.reply, 'bot');
+                }
+            } catch (error) {
+                loadingMsg.remove();
+                addAiMessage('Не удалось связаться с сервером. Попробуйте позже.', 'bot');
+                console.error(error);
+            } finally {
+                aiSendBtn.disabled = false;
+            }
+        }
+
+        // Отправка по клику на кнопку
+        aiSendBtn.addEventListener('click', sendAiMessage);
+
+        // Отправка по нажатию Enter в поле ввода
+        aiChatInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                sendAiMessage();
+            }
+        });
     </script>
 </body>
 </html>
