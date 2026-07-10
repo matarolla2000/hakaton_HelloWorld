@@ -1,14 +1,235 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Main</title>
+    <title>Главная — Чат с ИИ</title>
+    <style>
+        /* Базовые стили для страницы */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            box-sizing: border-box;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 24px;
+            color: #333;
+            margin: 0;
+        }
+
+        .logout-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .logout-btn:hover {
+            background-color: #bd2130;
+        }
+
+        /* Виджет контейнера чата */
+        .chat-container {
+            width: 100%;
+            max-width: 600px;
+            height: 60vh;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Область сообщений */
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        /* Стили для отдельных сообщений */
+        .message {
+            max-width: 75%;
+            padding: 10px 15px;
+            border-radius: 15px;
+            font-size: 15px;
+            line-height: 1.4;
+            word-wrap: break-word;
+        }
+
+        .message.user {
+            background-color: #007bff;
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 2px;
+        }
+
+        .message.ai {
+            background-color: #e9ecef;
+            color: #333;
+            align-self: flex-start;
+            border-bottom-left-radius: 2px;
+        }
+
+        .message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            align-self: center;
+            border-radius: 5px;
+            font-size: 13px;
+        }
+
+        /* Форма отправки сообщений */
+        .chat-form {
+            display: flex;
+            padding: 15px;
+            border-top: 1px solid #dee2e6;
+            background: #fff;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 1px solid #ced4da;
+            border-radius: 20px;
+            outline: none;
+            font-size: 15px;
+        }
+
+        .chat-input:focus {
+            border-color: #007bff;
+        }
+
+        .send-btn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 0 20px;
+            margin-left: 10px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+
+        .send-btn:hover {
+            background-color: #218838;
+        }
+
+        .send-btn:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+    </style>
 </head>
 <body>
-    <h1>Добро пожаловать, {{ username }}</h1>
-    <form action="{{ url_for('logout')}}" method="post">
-        <input type="submit" value="Выйти">
-    </form>
+
+    <div class="header">
+        <h1>Добро пожаловать, {{ username }}</h1>
+        <form action="{{ url_for('logout') }}" method="post">
+            <input type="submit" value="Выйти" class="logout-btn">
+        </form>
+    </div>
+
+    <!-- Контейнер чата -->
+    <div class="chat-container">
+        <!-- Сюда JS будет добавлять сообщения -->
+        <div class="chat-messages" id="chatMessages">
+            <div class="message ai">Привет! Я твой ИИ-ассистент. Чем могу помочь?</div>
+        </div>
+        
+        <!-- Форма для ввода текста -->
+        <form class="chat-form" id="chatForm">
+            <input type="text" id="userInput" class="chat-input" placeholder="Введите сообщение..." autocomplete="off" required>
+            <button type="submit" id="sendBtn" class="send-btn">Отправить</button>
+        </form>
+    </div>
+
+    <script>
+        const chatForm = document.getElementById('chatForm');
+        const userInput = document.getElementById('userInput');
+        const chatMessages = document.getElementById('chatMessages');
+        const sendBtn = document.getElementById('sendBtn');
+
+        // Функция добавления сообщения на экран
+        function appendMessage(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message', sender);
+            messageDiv.innerText = text;
+            chatMessages.appendChild(messageDiv);
+            
+            // Автоматическая прокрутка чата вниз
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Обработчик отправки формы
+        chatForm.addEventListener('submit', async (e) => {
+            e.preventDefault(); // Запрещаем стандартную перезагрузку страницы
+            
+            const messageText = userInput.value.trim();
+            if (!messageText) return;
+
+            // Отображаем сообщение пользователя
+            appendMessage(messageText, 'user');
+            userInput.value = ''; // Очищаем поле ввода
+
+            // Блокируем интерфейс на время ожидания ответа
+            userInput.disabled = true;
+            sendBtn.disabled = true;
+
+            try {
+                // Отправляем AJAX-запрос на ваш Flask роут /chat
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ message: messageText })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.response) {
+                    // Выводим ответ нейросети
+                    appendMessage(data.response, 'ai');
+                } else {
+                    // Если сервер вернул ошибку
+                    appendMessage(`Ошибка: ${data.error || 'Что-то пошло не так'}`, 'error');
+                }
+            } catch (error) {
+                // Если сломалась сеть или сервер недоступен
+                appendMessage('Не удалось связаться с сервером.', 'error');
+                console.error(error);
+            } finally {
+                // Разблокируем интерфейс
+                userInput.disabled = false;
+                sendBtn.disabled = false;
+                userInput.focus(); // Возвращаем фокус на поле ввода
+            }
+        });
+    </script>
 </body>
 </html>
