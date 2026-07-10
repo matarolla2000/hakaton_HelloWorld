@@ -1,13 +1,8 @@
-from flask import Flask, request, render_template, redirect, url_for, session, jsonify
-import os
-from openai import OpenAI
-from dotenv import load_dotenv
+from flask import Flask, request, render_template, redirect, url_for, session
 
 app = Flask(__name__)
 app.secret_key = 'any_secret_string_here'
 logined = False
-
-client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
 @app.route("/")
 def index():
@@ -41,29 +36,5 @@ def test():
 def logout():
     session.clear
     return redirect(url_for("login"))
-
-@app.route("/chat", methods=["POST"])
-def chat():
-    user_message = request.json.get("message", "").strip()
-    if not user_message:
-        return jsonify({"error": "Сообщение не может быть пустым"}), 400
-
-    try:
-        response = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[
-                {"role": "system", "content": "Ты дружелюбный и краткий ассистент в чате."},
-                {"role": "user", "content": user_message}
-            ],
-            max_tokens=500,
-            temperature=0.7
-        )
-        
-        # Извлекаем текст ответа
-        ai_response = response.choices[0].message.content
-        return jsonify({"response": ai_response})
-
-    except Exception as e:
-        return jsonify({"error": f"Ошибка API: {str(e)}"}), 500
 
 app.run(debug=True)

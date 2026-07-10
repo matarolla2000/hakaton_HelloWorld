@@ -156,52 +156,45 @@
 
     <!-- Контейнер чата -->
     <div class="chat-container">
-        <!-- Сюда JS будет добавлять сообщения -->
         <div class="chat-messages" id="chatMessages">
             <div class="message ai">Привет! Я твой ИИ-ассистент. Чем могу помочь?</div>
         </div>
         
-        <!-- Форма для ввода текста -->
         <form class="chat-form" id="chatForm">
             <input type="text" id="userInput" class="chat-input" placeholder="Введите сообщение..." autocomplete="off" required>
             <button type="submit" id="sendBtn" class="send-btn">Отправить</button>
         </form>
     </div>
 
-    <script>
+        <script>
         const chatForm = document.getElementById('chatForm');
         const userInput = document.getElementById('userInput');
         const chatMessages = document.getElementById('chatMessages');
         const sendBtn = document.getElementById('sendBtn');
 
-        // Функция добавления сообщения на экран
         function appendMessage(text, sender) {
             const messageDiv = document.createElement('div');
             messageDiv.classList.add('message', sender);
             messageDiv.innerText = text;
             chatMessages.appendChild(messageDiv);
-            
-            // Автоматическая прокрутка чата вниз
             chatMessages.scrollTop = chatMessages.scrollHeight;
+            return messageDiv;
         }
 
-        // Обработчик отправки формы
         chatForm.addEventListener('submit', async (e) => {
-            e.preventDefault(); // Запрещаем стандартную перезагрузку страницы
+            e.preventDefault();
             
             const messageText = userInput.value.trim();
             if (!messageText) return;
 
-            // Отображаем сообщение пользователя
             appendMessage(messageText, 'user');
-            userInput.value = ''; // Очищаем поле ввода
+            userInput.value = '';
 
-            // Блокируем интерфейс на время ожидания ответа
             userInput.disabled = true;
             sendBtn.disabled = true;
+            sendBtn.textContent = 'Отправка...';
 
             try {
-                // Отправляем AJAX-запрос на ваш Flask роут /chat
                 const response = await fetch('/chat', {
                     method: 'POST',
                     headers: {
@@ -210,24 +203,33 @@
                     body: JSON.stringify({ message: messageText })
                 });
 
-                const data = await response.json();
-
-                if (response.ok && data.response) {
-                    // Выводим ответ нейросети
-                    appendMessage(data.response, 'ai');
-                } else {
-                    // Если сервер вернул ошибку
-                    appendMessage(`Ошибка: ${data.error || 'Что-то пошло не так'}`, 'error');
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    appendMessage(`Ошибка: ${errorData.error || 'Что-то пошло не так'}`, 'error');
+                    return;
                 }
+
+                const aiMessageDiv = appendMessage('', 'ai');
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                
+                while (true) {
+                    const { value, done } = await reader.read();
+                    if (done) break;
+                    
+                    const chunk = decoder.decode(value, { stream: true });
+                    aiMessageDiv.innerText += chunk;
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }
+
             } catch (error) {
-                // Если сломалась сеть или сервер недоступен
-                appendMessage('Не удалось связаться с сервером.', 'error');
+                appendMessage('Не удалось связаться с сервером или поток прерван.', 'error');
                 console.error(error);
             } finally {
-                // Разблокируем интерфейс
                 userInput.disabled = false;
                 sendBtn.disabled = false;
-                userInput.focus(); // Возвращаем фокус на поле ввода
+                sendBtn.textContent = 'Отправить';
+                userInput.focus();
             }
         });
     </script>
