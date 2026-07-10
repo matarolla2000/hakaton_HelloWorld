@@ -3,12 +3,127 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HelloWorld — Опросник по кибербезопасности</title>
-<link rel="stylesheet" href="test.css">
-<link rel="stylesheet" href="/test.css">
+<title>МТС — Опросник по кибербезопасности</title>
+<style>
+
+  /* ===== ПАЛИТРА ===== */
+  :root{
+    --white: #ffffff;
+    --red:   #e30611;
+    --black: #1a1a1a;
+    --navy:  #0b1a33;   /* тёмно-синий — редкий акцент, только шапка */
+    --ice:   #eaf6ff;   /* голубо-белый — самый редкий акцент, только подсказка */
+    --line:  #e6e6e6;
+  }
+
+  *{ box-sizing: border-box; }
+  body{
+    margin: 0;
+    font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    background: var(--white);
+    color: var(--black);
+  }
+
+  /* Радио-переключатели слайдов и ответов спрятаны, но остаются доступными с клавиатуры */
+  .nav-radio, .opt{
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+    pointer-events: none;
+  }
+
+  /* ===== ШАПКА ===== */
+  .top{
+    background: var(--navy);
+    color: var(--white);
+    text-align: center;
+    padding: 22px 16px;
+  }
+  .top b{ color: var(--red); }
+  .top p{ margin: 6px 0 0; font-size: 14px; color: #b9c4d6; }
+
+  /* ===== СЛАЙДЫ (по умолчанию скрыты) ===== */
+  main{ max-width: 520px; margin: 0 auto; }
+  .slide{
+    display: none;
+    padding: 22px 20px 110px;
+  }
+  .eyebrow{
+    font-size: 12px; font-weight: 700; color: var(--red);
+    text-transform: uppercase; letter-spacing: 1px; margin: 0 0 8px;
+  }
+  .q{ font-size: 19px; font-weight: 700; line-height: 1.4; margin: 0 0 16px; }
+
+  .opt-label{
+    display: block;
+    border: 1.5px solid var(--line);
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 10px;
+    cursor: pointer;
+  }
+  .opt-label:hover{ border-color: var(--red); }
+  .opt:checked + .opt-label{ border-color: var(--black); background: #fafafa; }
+  .opt:focus-visible + .opt-label{ outline: 3px solid var(--red); outline-offset: 2px; }
+
+  .hint{
+    margin-top: 14px;
+    background: var(--ice);
+    border: 1px solid #8fc7ec;
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  /* ===== НИЖНЯЯ ПАНЕЛЬ СО СТРЕЛКАМИ ===== */
+  .bar{
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    max-width: 520px;
+    margin: 0 auto;
+    background: var(--white);
+    border-top: 1px solid var(--line);
+    padding: 14px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .arrow{
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--white);
+    background: var(--black);
+    font-size: 20px;
+    cursor: pointer;
+  }
+  .arrow.next{ background: var(--red); }
+  .arrow.ghost{ visibility: hidden; }      /* держит место, если кнопки нет */
+  .arrow.restart{ width: auto; border-radius: 24px; padding: 0 18px; font-size: 14px; font-weight: 700; }
+
+  /* ===== ПОКАЗ НУЖНОГО СЛАЙДА ПО ВЫБРАННОМУ РАДИО ===== */
+  #s1:checked  ~ main #c1,
+  #s2:checked  ~ main #c2,
+  #s3:checked  ~ main #c3,
+  #s4:checked  ~ main #c4,
+  #s5:checked  ~ main #c5,
+  #s6:checked  ~ main #c6,
+  #s7:checked  ~ main #c7,
+  #s8:checked  ~ main #c8,
+  #s9:checked  ~ main #c9,
+  #s10:checked ~ main #c10,
+  #s11:checked ~ main #c11{
+    display: block;
+  }
+
+  @media (prefers-reduced-motion: reduce){ *{ transition: none !important; } }
+</style>
 </head>
 <body>
 
+<!-- Скрытые переключатели слайдов: именно checked-радио определяет, что видно -->
 <input type="radio" name="slide" id="s1" class="nav-radio" checked>
 <input type="radio" name="slide" id="s2" class="nav-radio">
 <input type="radio" name="slide" id="s3" class="nav-radio">
